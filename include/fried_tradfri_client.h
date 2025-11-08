@@ -8,6 +8,10 @@
 //#define FRIED_TRADFRI_IDENTITY "tradfri_12345"
 //#define FRIED_TRADFRI_KEY "IaY5AQRXw1awfqEt"
 
+extern char* fried_tradfri_gateway_ip;
+extern char* fried_tradfri_identity;
+extern char* fried_tradfri_key;
+
 void tradfri_init();
 char* join_url(const char* base, const char* sub);
 char* Tradfri_send(coap_pdu_code_t method, bool wait, const char* suburl, const char* data, size_t data_len);

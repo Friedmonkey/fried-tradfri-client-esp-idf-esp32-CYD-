@@ -1,7 +1,14 @@
 #include "fried_tradfri_client.h"
 
-void tradfri_init()
+char* fried_tradfri_gateway_ip = "0.0.0.0";
+char* fried_tradfri_identity = "identity";
+char* fried_tradfri_key = "key";
+
+void tradfri_init(char* gateway_ip, char* identity, char* key)
 {
+    fried_tradfri_gateway_ip = gateway_ip;
+    fried_tradfri_identity = identity;
+    fried_tradfri_key = key;
     coaps_init();
 }
 
@@ -18,13 +25,13 @@ char* join_url(const char* base, const char* sub) {
 char* Tradfri_send(coap_pdu_code_t method, bool wait, const char* suburl, const char* data, size_t data_len)
 {
     char* fullurl = NULL;
-    asprintf(&fullurl, "coaps://%s:5684%s", FRIED_TRADFRI_GATEWAY_IP, suburl);
+    asprintf(&fullurl, "coaps://%s:5684%s", fried_tradfri_gateway_ip, suburl);
     if (!fullurl) return NULL;
 
     printf("%s\n", fullurl);
     if (data)
         printf("data: %s\n", data);
-    char* result = CoAPsSend(method, wait, fullurl, FRIED_TRADFRI_IDENTITY, FRIED_TRADFRI_KEY, data, data_len);
+    char* result = CoAPsSend(method, wait, fullurl, fried_tradfri_identity, fried_tradfri_key, data, data_len);
     free(fullurl);
     return result;
 }
