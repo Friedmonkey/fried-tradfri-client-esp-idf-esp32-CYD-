@@ -6,6 +6,7 @@ void tradfri_init()
 }
 
 char* join_url(const char* base, const char* sub) {
+    if (!base) return NULL;
     size_t len = strlen(base) + strlen(sub) + 1;
     char* out = (char*)malloc(len);
     if (!out) return NULL;
@@ -16,14 +17,14 @@ char* join_url(const char* base, const char* sub) {
 
 char* Tradfri_send(coap_pdu_code_t method, bool wait, const char* suburl, const char* data, size_t data_len)
 {
-    const char* baseurl = "coaps://192.168.2.9:5684";
-    char* fullurl = join_url(baseurl, suburl);
+    char* fullurl = NULL;
+    asprintf(&fullurl, "coaps://%s:5684%s", FRIED_TRADFRI_GATEWAY_IP, suburl);
     if (!fullurl) return NULL;
 
     printf("%s\n", fullurl);
     if (data)
         printf("data: %s\n", data);
-    char* result = CoAPsSend(method, wait, fullurl, "tradfri_12345", "IaY5AQRXw1awfqEt", data, data_len);
+    char* result = CoAPsSend(method, wait, fullurl, FRIED_TRADFRI_IDENTITY, FRIED_TRADFRI_KEY, data, data_len);
     free(fullurl);
     return result;
 }
